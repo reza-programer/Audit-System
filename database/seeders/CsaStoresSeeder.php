@@ -1,0 +1,341 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\Store;
+use Illuminate\Database\Seeder;
+
+class CsaStoresSeeder extends Seeder
+{
+    public function run(): void
+    {
+        // 1. Update/align previously entered stores ("data yang atas") if they exist with old codes
+        $oldStoreMapping = [
+            'TKO-MEGU' => 'TMEGU',
+            'TKO-TPRV' => 'TTVP',
+            'TKO-JTWG' => 'TJW',
+        ];
+
+        foreach ($oldStoreMapping as $oldCode => $newCode) {
+            $existing = Store::where('code', $oldCode)->first();
+            if ($existing) {
+                // Check if target code already exists
+                $target = Store::where('code', $newCode)->first();
+                if (!$target) {
+                    $existing->update(['code' => $newCode]);
+                }
+            }
+        }
+
+        // 2. 30 Official CSA Stores from image
+        $stores = [
+            [
+                'code'            => 'TTVP',
+                'name'            => 'CS TUPAREV',
+                'address'         => 'Jl. Tuparev No 109F, Kedawung',
+                'area'            => 'Cirebon',
+                'regional'        => 'Jawa Barat',
+                'business_entity' => 'CSA Retail',
+                'type'            => 'toko',
+                'status'          => 'active',
+            ],
+            [
+                'code'            => 'TOP02',
+                'name'            => 'OPPO STORE TENTARA PELAJAR',
+                'address'         => 'Jl. Tentara Pelajar No.72B&C, Kejaksan',
+                'area'            => 'Cirebon',
+                'regional'        => 'Jawa Barat',
+                'business_entity' => 'CSA Retail',
+                'type'            => 'toko',
+                'status'          => 'active',
+            ],
+            [
+                'code'            => 'TMEGU',
+                'name'            => 'UNBOXING MEGU',
+                'address'         => 'Jl. Fatahillah/sumber plered, blok randualas No.70, RT.002/RW.001, Megu Cilik, Kec. Weru, Kabupaten Cirebon, Jawa Barat 45159',
+                'area'            => 'Cirebon',
+                'regional'        => 'Jawa Barat',
+                'business_entity' => 'CSA Retail',
+                'type'            => 'toko',
+                'status'          => 'active',
+            ],
+            [
+                'code'            => 'TPRM',
+                'name'            => 'CS PERUM',
+                'address'         => 'Jl. Ciremai Raya No.140, Larangan',
+                'area'            => 'Cirebon',
+                'regional'        => 'Jawa Barat',
+                'business_entity' => 'CSA Retail',
+                'type'            => 'toko',
+                'status'          => 'active',
+            ],
+            [
+                'code'            => 'GS',
+                'name'            => 'CS SINDANG',
+                'address'         => 'Jl. Raya cipejeuh no.41, cipejeuh kulon, lemahabang',
+                'area'            => 'Cirebon',
+                'regional'        => 'Jawa Barat',
+                'business_entity' => 'CSA Retail',
+                'type'            => 'toko',
+                'status'          => 'active',
+            ],
+            [
+                'code'            => 'THM02',
+                'name'            => 'HPM SINDANG',
+                'address'         => 'Jl. MT Haryono, Lemah Abang Kulon',
+                'area'            => 'Cirebon',
+                'regional'        => 'Jawa Barat',
+                'business_entity' => 'CSA Retail',
+                'type'            => 'toko',
+                'status'          => 'active',
+            ],
+            [
+                'code'            => 'TBBK',
+                'name'            => 'CS BABAKAN',
+                'address'         => 'Jl. Pangeran sutajaya, No. 139 Babakan',
+                'area'            => 'Cirebon',
+                'regional'        => 'Jawa Barat',
+                'business_entity' => 'CSA Retail',
+                'type'            => 'toko',
+                'status'          => 'active',
+            ],
+            [
+                'code'            => 'GHM',
+                'name'            => 'HPM CILEDUG',
+                'address'         => 'Jl. Raya Ciledug No.100b, Jatiseeng',
+                'area'            => 'Cirebon',
+                'regional'        => 'Jawa Barat',
+                'business_entity' => 'CSA Retail',
+                'type'            => 'toko',
+                'status'          => 'active',
+            ],
+            [
+                'code'            => 'TPBR2',
+                'name'            => 'UNBOXING PABUARAN',
+                'address'         => 'Jl. Letjen s. Parman (depan BPR cahaya fajar) Paburan wetan',
+                'area'            => 'Cirebon',
+                'regional'        => 'Jawa Barat',
+                'business_entity' => 'CSA Retail',
+                'type'            => 'toko',
+                'status'          => 'active',
+            ],
+            [
+                'code'            => 'TGBG',
+                'name'            => 'CS GEBANG',
+                'address'         => 'Jl. Pangeran sutajaya gebang - pabuaran (utara pegadaian gebang induk)',
+                'area'            => 'Cirebon',
+                'regional'        => 'Jawa Barat',
+                'business_entity' => 'CSA Retail',
+                'type'            => 'toko',
+                'status'          => 'active',
+            ],
+            [
+                'code'            => 'TOKO',
+                'name'            => 'CS CILEDUG',
+                'address'         => 'Jl. Merdeka Barat No.66, Ciledug Kulon',
+                'area'            => 'Cirebon',
+                'regional'        => 'Jawa Barat',
+                'business_entity' => 'CSA Retail',
+                'type'            => 'toko',
+                'status'          => 'active',
+            ],
+            [
+                'code'            => 'TCA01',
+                'name'            => 'UNBOXING CILEDUG',
+                'address'         => 'Jl. Merdeka Utara (depan pasar ciledug)',
+                'area'            => 'Cirebon',
+                'regional'        => 'Jawa Barat',
+                'business_entity' => 'CSA Retail',
+                'type'            => 'toko',
+                'status'          => 'active',
+            ],
+            [
+                'code'            => 'TCLP',
+                'name'            => 'CS CILACAP',
+                'address'         => 'Jl. Brigjen katamso no.19 cilacap (depan kantor pln)',
+                'area'            => 'Cilacap',
+                'regional'        => 'Jawa Tengah',
+                'business_entity' => 'CSA Retail',
+                'type'            => 'toko',
+                'status'          => 'active',
+            ],
+            [
+                'code'            => 'TPLAZ',
+                'name'            => 'CS PLAZA CELL',
+                'address'         => 'Jl. Kartini, No.166 Petarukan',
+                'area'            => 'Pemalang',
+                'regional'        => 'Jawa Tengah',
+                'business_entity' => 'CSA Retail',
+                'type'            => 'toko',
+                'status'          => 'active',
+            ],
+            [
+                'code'            => 'TTGL',
+                'name'            => 'CS TEGAL',
+                'address'         => 'Jl. Kapten sudibyo no.80 tegal (samping gedung nusa bahari)',
+                'area'            => 'Tegal',
+                'regional'        => 'Jawa Tengah',
+                'business_entity' => 'CSA Retail',
+                'type'            => 'toko',
+                'status'          => 'active',
+            ],
+            [
+                'code'            => 'TKRO',
+                'name'            => 'CS KROYA',
+                'address'         => 'Jl. Jenderal Gatot Subroto No.121-98,Kroya,kec.Kroya, kabupaten Cilacap,Jawa Tengah. Kode Pos : 53282 depan tambal ban',
+                'area'            => 'Cilacap',
+                'regional'        => 'Jawa Tengah',
+                'business_entity' => 'CSA Retail',
+                'type'            => 'toko',
+                'status'          => 'active',
+            ],
+            [
+                'code'            => 'TGSJT',
+                'name'            => 'UNBOXING JATIBARANG',
+                'address'         => 'Jl. Siliwangi No.113 Jatibarang',
+                'area'            => 'Indramayu',
+                'regional'        => 'Jawa Barat',
+                'business_entity' => 'CSA Retail',
+                'type'            => 'toko',
+                'status'          => 'active',
+            ],
+            [
+                'code'            => 'TSJTB',
+                'name'            => 'SP JATIBARANG',
+                'address'         => 'Jl. Mayor Dasuki No.70a Jatibarang',
+                'area'            => 'Indramayu',
+                'regional'        => 'Jawa Barat',
+                'business_entity' => 'CSA Retail',
+                'type'            => 'toko',
+                'status'          => 'active',
+            ],
+            [
+                'code'            => 'TINTP',
+                'name'            => 'INTIPHONE',
+                'address'         => 'Jl. Kh Abdul Halim no 278, Lampu Merah Prapatan Mambo, Majalengka',
+                'area'            => 'Majalengka',
+                'regional'        => 'Jawa Barat',
+                'business_entity' => 'CSA Retail',
+                'type'            => 'toko',
+                'status'          => 'active',
+            ],
+            [
+                'code'            => 'TPAT',
+                'name'            => 'CS PATROL',
+                'address'         => 'Jl. Raya Patrol No.33, Patrol',
+                'area'            => 'Indramayu',
+                'regional'        => 'Jawa Barat',
+                'business_entity' => 'CSA Retail',
+                'type'            => 'toko',
+                'status'          => 'active',
+            ],
+            [
+                'code'            => 'TJW2',
+                'name'            => 'CS JATIWANGI2',
+                'address'         => 'Jl. Raya Ciborelang No.6, Ciborelang',
+                'area'            => 'Majalengka',
+                'regional'        => 'Jawa Barat',
+                'business_entity' => 'CSA Retail',
+                'type'            => 'toko',
+                'status'          => 'active',
+            ],
+            [
+                'code'            => 'TJW',
+                'name'            => 'CS JATIWANGI',
+                'address'         => 'Jl. raya sutawangi no.52, jatiwangi (depan koramil)',
+                'area'            => 'Majalengka',
+                'regional'        => 'Jawa Barat',
+                'business_entity' => 'CSA Retail',
+                'type'            => 'toko',
+                'status'          => 'active',
+            ],
+            [
+                'code'            => 'TMJTW',
+                'name'            => 'AUTO EV JATIWANGI',
+                'address'         => 'Jl. Ahmad Yani, No 127, Sutawangi, Jatiwangi',
+                'area'            => 'Majalengka',
+                'regional'        => 'Jawa Barat',
+                'business_entity' => 'Auto EV',
+                'type'            => 'toko',
+                'status'          => 'active',
+            ],
+            [
+                'code'            => 'TMSDG',
+                'name'            => 'AUTO EV CILEDUG',
+                'address'         => 'Jl. Merdeka Barat No.64, Ciledug Kulon',
+                'area'            => 'Cirebon',
+                'regional'        => 'Jawa Barat',
+                'business_entity' => 'Auto EV',
+                'type'            => 'toko',
+                'status'          => 'active',
+            ],
+            [
+                'code'            => 'TMCLD',
+                'name'            => 'AUTO EV SINDANG',
+                'address'         => 'Jl. Cipeujeuh Wetan, Lemahabang',
+                'area'            => 'Cirebon',
+                'regional'        => 'Jawa Barat',
+                'business_entity' => 'Auto EV',
+                'type'            => 'toko',
+                'status'          => 'active',
+            ],
+            [
+                'code'            => 'COMCLD',
+                'name'            => 'CSN CILEDUG',
+                'address'         => 'Ciledug Space (samping Eiger), Ruko Ciledug, Jl. Pangeran Walangsungsang No.03/01 Space No 2-3, Jatiseeng, Ciledug, Cirebon',
+                'area'            => 'Cirebon',
+                'regional'        => 'Jawa Barat',
+                'business_entity' => 'CSN',
+                'type'            => 'toko',
+                'status'          => 'active',
+            ],
+            [
+                'code'            => 'UBXPWK',
+                'name'            => 'UNBOXING PURWAKARTA',
+                'address'         => 'Jl. Jendral Sudirman No.22, Nagri Tengah, Purwakarta (samping Holland Bakery)',
+                'area'            => 'Purwakarta',
+                'regional'        => 'Jawa Barat',
+                'business_entity' => 'CSA Retail',
+                'type'            => 'toko',
+                'status'          => 'active',
+            ],
+            [
+                'code'            => 'CMAWN',
+                'name'            => 'COMPLETE MULIA ARJAWINANGUN',
+                'address'         => 'Jl. Pahlawan No.230, Jungjang, Kec. Arjawinangun, Kabupaten Cirebon, Jawa Barat 45162',
+                'area'            => 'Cirebon',
+                'regional'        => 'Jawa Barat',
+                'business_entity' => 'Complete Mulia',
+                'type'            => 'toko',
+                'status'          => 'active',
+            ],
+            [
+                'code'            => 'ANAN',
+                'name'            => 'TOKO MAS AN AN',
+                'address'         => 'Jl. Lapang Bola Ampera, Ciledug Kulon, Kec. Ciledug, Kabupaten Cirebon, Jawa Barat 45188',
+                'area'            => 'Cirebon',
+                'regional'        => 'Jawa Barat',
+                'business_entity' => 'Toko Mas',
+                'type'            => 'toko',
+                'status'          => 'active',
+            ],
+            [
+                'code'            => 'CMPWK',
+                'name'            => 'COMPLETE MULIA PURWAKARTA',
+                'address'         => 'Jl. Jendral Sudirman No.116, Nagri Tengah, Kec. Purwakarta, Kabupaten Purwakarta, Jawa Barat 41114',
+                'area'            => 'Purwakarta',
+                'regional'        => 'Jawa Barat',
+                'business_entity' => 'Complete Mulia',
+                'type'            => 'toko',
+                'status'          => 'active',
+            ],
+        ];
+
+        foreach ($stores as $storeData) {
+            Store::updateOrCreate(
+                ['code' => $storeData['code']],
+                $storeData
+            );
+        }
+    }
+}

@@ -48,12 +48,17 @@ const selectedCategoryName = computed(() => {
     return props.categories.find(c => c.id === form.category_id)?.name || 'Belum dipilih';
 });
 
+const selectedStore = computed(() => {
+    if (useCustomStore.value || !form.store_id) return null;
+    return props.stores.find(s => s.id === form.store_id);
+});
+
 const selectedStoreName = computed(() => {
     if (useCustomStore.value) {
         return form.custom_store_name ? `${form.custom_store_name} (Manual)` : 'Ketik nama toko/unit baru';
     }
-    const store = props.stores.find(s => s.id === form.store_id);
-    return store ? `${store.name} (${store.code})` : 'Belum dipilih';
+    const store = selectedStore.value;
+    return store ? `[${store.code}] ${store.name}` : 'Belum dipilih';
 });
 
 const selectedAuditorsList = computed(() => {
@@ -246,11 +251,15 @@ const submit = () => {
                             v-model="form.store_id"
                             class="w-full text-xs rounded border-gray-300 focus:border-blue-500 focus:ring-blue-500"
                         >
-                            <option value="" disabled>Pilih Unit Toko / Cabang</option>
+                            <option value="" disabled>-- Pilih Unit Toko / Cabang CSA --</option>
                             <option v-for="s in stores" :key="s.id" :value="s.id">
-                                {{ s.name }} ({{ s.code }}) {{ s.type ? `[${s.type.toUpperCase()}]` : '' }} {{ s.business_entity ? `- ${s.business_entity}` : '' }}
+                                [{{ s.code }}] {{ s.name }} {{ s.area ? `• ${s.area}` : '' }}
                             </option>
                         </select>
+                        <div v-if="selectedStore && selectedStore.address" class="mt-1.5 text-[11px] text-gray-600 bg-gray-50 p-2 rounded border border-gray-100 flex items-start gap-1.5">
+                            <span class="text-blue-600 font-semibold shrink-0">📍 Alamat Toko:</span>
+                            <span>{{ selectedStore.address }}</span>
+                        </div>
                     </div>
 
                     <!-- Free text input mode -->

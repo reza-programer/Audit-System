@@ -30,8 +30,18 @@ class DashboardController extends Controller
             ->where('status', Finding::STATUS_WAITING_VERIFICATION)
             ->count();
 
-        $closedFindings = Finding::whereHas('audit', fn ($q) => $q->whereIn('store_id', $storeIds))
+        $auditeeFindingsQuery = Finding::whereHas('audit', fn ($q) => $q->whereIn('store_id', $storeIds));
+
+        $closedFindings = (clone $auditeeFindingsQuery)
             ->where('status', Finding::STATUS_CLOSED)
+            ->count();
+
+        $closedOnTime = (clone $auditeeFindingsQuery)
+            ->closedOnTime()
+            ->count();
+
+        $closedOverdue = (clone $auditeeFindingsQuery)
+            ->closedOverdue()
             ->count();
 
         $overdueActions = Finding::whereHas('audit', fn ($q) => $q->whereIn('store_id', $storeIds))
@@ -61,6 +71,8 @@ class DashboardController extends Controller
                 'in_progress_findings' => $inProgressFindings,
                 'waiting_verification' => $waitingVerification,
                 'closed_findings'      => $closedFindings,
+                'closed_on_time'       => $closedOnTime,
+                'closed_overdue'       => $closedOverdue,
                 'overdue_actions'      => $overdueActions,
             ],
             'recent_audits' => $recentAudits,

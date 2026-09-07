@@ -142,6 +142,27 @@ class Finding extends Model
         })->whereNotIn('status', [self::STATUS_VERIFIED, self::STATUS_CLOSED]);
     }
 
+    public function scopeClosedOnTime($query)
+    {
+        return $query->where('status', self::STATUS_CLOSED)
+            ->where(function ($q) {
+                $q->whereDoesntHave('actionPlan')
+                  ->orWhereHas('actionPlan', function ($ap) {
+                      $ap->whereNull('deadline')
+                         ->orWhereRaw('DATE(findings.updated_at) <= action_plans.deadline');
+                  });
+            });
+    }
+
+    public function scopeClosedOverdue($query)
+    {
+        return $query->where('status', self::STATUS_CLOSED)
+            ->whereHas('actionPlan', function ($ap) {
+                $ap->whereNotNull('deadline')
+                   ->whereRaw('DATE(findings.updated_at) > action_plans.deadline');
+            });
+    }
+
     // Helpers
     public function isCloseable(): bool
     {

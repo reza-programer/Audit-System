@@ -47,9 +47,21 @@ const props = defineProps({
                 <div class="text-xl sm:text-2xl font-semibold text-blue-700 mt-1">{{ stats.waiting_verification }}</div>
             </div>
 
-            <div class="bg-white p-3.5 sm:p-4 rounded border border-gray-200">
-                <div class="text-[10px] sm:text-[11px] font-medium text-emerald-600 uppercase tracking-wider">Closed</div>
-                <div class="text-xl sm:text-2xl font-semibold text-emerald-600 mt-1">{{ stats.closed_findings }}</div>
+            <div class="bg-white p-3.5 sm:p-4 rounded border border-emerald-200 bg-emerald-50/20">
+                <div class="text-[10px] sm:text-[11px] font-medium text-emerald-700 uppercase tracking-wider">Closed (All)</div>
+                <div class="flex items-center justify-between gap-1.5 mt-1">
+                    <div class="text-xl sm:text-2xl font-bold text-emerald-700 leading-none shrink-0">{{ stats.closed_findings }}</div>
+                    <div class="flex items-center gap-1 shrink-0">
+                        <div class="bg-emerald-100/80 rounded px-1.5 py-0.5 text-center border border-emerald-200/80" title="Closed tepat waktu">
+                            <div class="text-[8px] sm:text-[8.5px] font-semibold text-emerald-700 uppercase tracking-tight leading-none">On Time</div>
+                            <div class="text-[11px] sm:text-xs font-bold text-emerald-800 mt-0.5 leading-none">{{ stats.closed_on_time ?? 0 }}</div>
+                        </div>
+                        <div class="bg-rose-100/80 rounded px-1.5 py-0.5 text-center border border-rose-200/80" title="Closed melewati deadline">
+                            <div class="text-[8px] sm:text-[8.5px] font-semibold text-rose-600 uppercase tracking-tight leading-none">Overdue</div>
+                            <div class="text-[11px] sm:text-xs font-bold text-rose-700 mt-0.5 leading-none">{{ stats.closed_overdue ?? 0 }}</div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="bg-white p-3.5 sm:p-4 rounded border border-red-200 bg-red-50/30">

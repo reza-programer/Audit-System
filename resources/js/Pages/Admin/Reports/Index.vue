@@ -34,6 +34,14 @@ const props = defineProps({
         type: Number,
         default: 0,
     },
+    closed_on_time: {
+        type: Number,
+        default: 0,
+    },
+    closed_overdue: {
+        type: Number,
+        default: 0,
+    },
 });
 
 const exportDropdownOpen = ref(false);
@@ -237,7 +245,13 @@ const topLossStores = computed(() => {
             <div class="bg-white p-5 rounded-xl border border-gray-200/80 shadow-xs">
                 <div class="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">TINGKAT CLOSED</div>
                 <div class="text-2xl font-bold text-emerald-600 mt-1.5">{{ calculatedCompletionRate }}%</div>
-                <div class="text-xs text-gray-400 mt-1">{{ by_status.CLOSED || 0 }} temuan ditutup</div>
+                <div class="text-xs text-gray-400 mt-1 flex flex-wrap items-center gap-1.5">
+                    <span><b class="text-gray-700">{{ by_status.CLOSED || 0 }}</b> All</span>
+                    <span class="text-gray-300">•</span>
+                    <span class="text-emerald-700 font-medium"><b>{{ closed_on_time || 0 }}</b> On Time</span>
+                    <span class="text-gray-300">•</span>
+                    <span class="text-rose-600 font-medium"><b>{{ closed_overdue || 0 }}</b> Overdue</span>
+                </div>
             </div>
 
             <div class="bg-white p-5 rounded-xl border border-gray-200/80 shadow-xs">

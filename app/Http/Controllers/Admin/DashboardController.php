@@ -23,6 +23,8 @@ class DashboardController extends Controller
         $inProgressFindings = Finding::where('status', Finding::STATUS_IN_PROGRESS)->count();
         $waitingVerification = Finding::where('status', Finding::STATUS_WAITING_VERIFICATION)->count();
         $closedFindings = Finding::where('status', Finding::STATUS_CLOSED)->count();
+        $closedOnTime = Finding::closedOnTime()->count();
+        $closedOverdue = Finding::closedOverdue()->count();
         $overdueFindings = Finding::overdue()->count();
         $totalLossAmount = Finding::sum('loss_amount') ?? 0;
 
@@ -65,6 +67,8 @@ class DashboardController extends Controller
                 'in_progress_findings' => $inProgressFindings,
                 'waiting_verification' => $waitingVerification,
                 'closed_findings'      => $closedFindings,
+                'closed_on_time'       => $closedOnTime,
+                'closed_overdue'       => $closedOverdue,
                 'overdue_findings'     => $overdueFindings,
                 'total_loss_amount'    => $totalLossAmount,
             ],

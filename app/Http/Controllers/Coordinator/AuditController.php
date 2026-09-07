@@ -87,7 +87,7 @@ class AuditController extends Controller
             ]);
 
         return Inertia::render('Coordinator/Audits/Create', [
-            'stores'          => Store::active()->orderBy('name')->get(['id', 'name', 'code', 'business_entity', 'type']),
+            'stores'          => Store::active()->orderBy('name')->get(['id', 'name', 'code', 'business_entity', 'type', 'address', 'area']),
             'categories'      => \App\Models\AuditCategory::active()->orderBy('name')->get(['id', 'name']),
             'auditors'        => User::whereHas('roles', fn ($q) => $q->where('name', 'auditor'))
                 ->where('is_active', true)
@@ -259,7 +259,7 @@ class AuditController extends Controller
                 'notes'        => $audit->notes,
             ],
             'categories' => \App\Models\AuditCategory::active()->orderBy('name')->get(['id', 'name']),
-            'stores'     => Store::active()->orderBy('name')->get(['id', 'name', 'code', 'business_entity', 'type']),
+            'stores'     => Store::active()->orderBy('name')->get(['id', 'name', 'code', 'business_entity', 'type', 'address', 'area']),
             'auditors'   => User::whereHas('roles', fn ($q) => $q->where('name', 'auditor'))
                 ->where('is_active', true)
                 ->orderBy('name')

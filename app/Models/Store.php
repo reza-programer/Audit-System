@@ -18,6 +18,7 @@ class Store extends Model
         'type',
         'area',
         'regional',
+        'address',
         'status',
     ];
 

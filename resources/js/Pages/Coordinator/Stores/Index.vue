@@ -125,12 +125,13 @@ const deleteStore = (store) => {
 
                 <a
                     :href="route('coordinator.stores.download-template')"
-                    class="inline-flex items-center gap-1 px-2.5 sm:px-3 py-1.5 sm:py-2 text-xs font-medium rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 transition-colors shadow-2xs cursor-pointer"
+                    class="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 text-xs font-medium rounded-md border border-emerald-300 bg-white text-emerald-700 hover:bg-emerald-50 hover:border-emerald-400 transition-colors shadow-2xs cursor-pointer"
+                    title="Download Seluruh Master Data Toko ke format Excel"
                 >
-                    <svg class="w-3.5 h-3.5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                     </svg>
-                    Template
+                    Download Data
                 </a>
 
                 <Link
@@ -204,6 +205,9 @@ const deleteStore = (store) => {
                                 Kode: <strong class="text-gray-800">{{ s.code }}</strong>
                                 <span v-if="s.business_entity"> • {{ s.business_entity }}</span>
                             </div>
+                            <div v-if="s.address" class="text-[10px] text-gray-500 mt-1 line-clamp-2">
+                                📍 {{ s.address }}
+                            </div>
                         </div>
                         <span
                             class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-medium border"
@@ -275,7 +279,10 @@ const deleteStore = (store) => {
                             </td>
                             <td class="px-4 py-3 align-middle">
                                 <div class="font-medium text-gray-900">{{ s.name }}</div>
-                                <div v-if="s.business_entity" class="text-[11px] text-slate-500 font-mono mt-0.5">
+                                <div v-if="s.address" class="text-[11px] text-gray-500 line-clamp-1 mt-0.5" :title="s.address">
+                                    📍 {{ s.address }}
+                                </div>
+                                <div v-if="s.business_entity" class="text-[10px] text-slate-400 font-mono mt-0.5">
                                     {{ s.business_entity }}
                                 </div>
                             </td>

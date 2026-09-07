@@ -67,6 +67,8 @@ class ReportController extends Controller
 
         $totalFindings = Finding::count();
         $closedFindings = Finding::where('status', 'CLOSED')->count();
+        $closedOnTime = Finding::closedOnTime()->count();
+        $closedOverdue = Finding::closedOverdue()->count();
         $completionRate = $totalFindings > 0 ? round(($closedFindings / $totalFindings) * 100, 1) : 0;
 
         return Inertia::render('Admin/Reports/Index', [
@@ -77,6 +79,8 @@ class ReportController extends Controller
             'total_loss'      => (float) (Finding::sum('loss_amount') ?? 0),
             'total_findings'  => $totalFindings,
             'completion_rate' => $completionRate,
+            'closed_on_time'  => $closedOnTime,
+            'closed_overdue'  => $closedOverdue,
         ]);
     }
 
