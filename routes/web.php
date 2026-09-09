@@ -109,6 +109,7 @@ Route::middleware(['auth', 'role:admin|chief'])->prefix('admin')->name('admin.')
     Route::get('/findings/{finding}', [AdminFindingController::class, 'show'])->name('findings.show');
     Route::patch('/findings/{finding}/review-severity', [AdminFindingController::class, 'reviewSeverity'])->name('findings.review-severity');
     Route::patch('/findings/{finding}/recommendation', [AdminFindingController::class, 'updateRecommendation'])->name('findings.recommendation.update');
+    Route::patch('/findings/{finding}/close', [AdminFindingController::class, 'close'])->name('findings.close');
     Route::delete('/findings/{finding}', [AdminFindingController::class, 'destroy'])->name('findings.destroy');
 
     // Action Plans
@@ -154,6 +155,7 @@ Route::middleware(['auth', 'role:coordinator|asmen|chief|admin'])->prefix('coord
     Route::get('/findings/{finding}', [CoordinatorFindingController::class, 'show'])->name('findings.show');
     Route::patch('/findings/{finding}/review-severity', [CoordinatorFindingController::class, 'reviewSeverity'])->name('findings.review-severity');
     Route::patch('/findings/{finding}/recommendation', [CoordinatorFindingController::class, 'updateRecommendation'])->name('findings.recommendation.update');
+    Route::patch('/findings/{finding}/close', [CoordinatorFindingController::class, 'close'])->name('findings.close');
 
     // Finding Quality Monitoring
     Route::get('/finding-qualities', [AuditorQualityFindingController::class, 'index'])->name('finding-qualities.index');
@@ -206,7 +208,6 @@ Route::middleware(['auth', 'role:auditor'])->prefix('auditor')->name('auditor.')
     Route::delete('/findings/{finding}', [AuditorFindingController::class, 'destroy'])->name('findings.destroy');
     Route::patch('/findings/{finding}/action-plan', [AuditorFindingController::class, 'updateActionPlan'])->name('findings.action-plan.update');
     Route::post('/findings/{finding}/evidences', [AuditorFindingController::class, 'storeEvidence'])->name('findings.evidences.store');
-    Route::patch('/findings/{finding}/close', [AuditorFindingController::class, 'close'])->name('findings.close');
 
     // Finding Quality Reports
     Route::get('/finding-qualities', [AuditorQualityFindingController::class, 'index'])->name('finding-qualities.index');

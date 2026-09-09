@@ -92,7 +92,6 @@ class RolePermissionSeeder extends Seeder
             'finding.edit',
             'finding.delete',
             'finding.verify',
-            'finding.close',
             'action-plan.view',
             'evidence.upload',
             'evidence.verify',

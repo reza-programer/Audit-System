@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AuditCategory;
 use App\Models\Finding;
 use App\Models\Sop;
+use App\Services\WhatsAppService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -41,7 +42,7 @@ class FindingController extends Controller
         ]);
     }
 
-    public function show(Finding $finding): Response
+    public function show(Request $request, Finding $finding): Response
     {
         $finding->load([
             'audit.store',
@@ -96,8 +97,24 @@ class FindingController extends Controller
                     'uploaded_at'         => $e->created_at->format('d M Y H:i'),
                     'file_url'            => $e->file_url,
                 ]),
+                'can_close' => $finding->isCloseable() && (bool) $request->user()?->can('close', $finding),
             ],
         ]);
+    }
+
+    public function close(Request $request, Finding $finding): RedirectResponse
+    {
+        $this->authorize('close', $finding);
+
+        $finding->update(['status' => Finding::STATUS_CLOSED]);
+
+        // Update action plan status
+        $finding->actionPlan?->update(['status' => 'COMPLETED']);
+
+        WhatsAppService::notifyFindingClosed($finding);
+
+        return redirect()->route('admin.findings.show', $finding)
+            ->with('success', 'Data tersimpan! Temuan audit resmi ditutup (CLOSED).');
     }
 
     public function updateRecommendation(Request $request, Finding $finding): RedirectResponse

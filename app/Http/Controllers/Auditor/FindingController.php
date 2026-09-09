@@ -131,7 +131,6 @@ class FindingController extends Controller
                     'file_url'            => $e->file_url,
                     'can_verify'          => $e->isPending(),
                 ]),
-                'can_close' => $finding->isCloseable(),
             ],
         ]);
     }
@@ -176,21 +175,6 @@ class FindingController extends Controller
 
         return redirect()->route('auditor.findings.show', $finding)
             ->with('success', 'Finding berhasil diperbarui.');
-    }
-
-    public function close(Request $request, Finding $finding): RedirectResponse
-    {
-        $this->authorize('close', $finding);
-
-        $finding->update(['status' => Finding::STATUS_CLOSED]);
-
-        // Update action plan status
-        $finding->actionPlan?->update(['status' => 'COMPLETED']);
-
-        \App\Services\WhatsAppService::notifyFindingClosed($finding);
-
-        return redirect()->route('auditor.findings.show', $finding)
-            ->with('success', 'Data saved! Finding berhasil ditutup.');
     }
 
     public function updateActionPlan(Request $request, Finding $finding): RedirectResponse

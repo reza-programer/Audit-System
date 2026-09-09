@@ -1,5 +1,5 @@
 <script setup>
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import { Head, Link, useForm, router } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import StatusBadge from '@/Components/StatusBadge.vue';
 import SeverityBadge from '@/Components/SeverityBadge.vue';
@@ -98,13 +98,23 @@ const submitSeverityReview = () => {
         preserveScroll: true,
     });
 };
+
+const closeFinding = () => {
+    openConfirm({
+        title: 'Tutup Temuan Audit (Close Finding)',
+        message: 'Temuan ini akan dinyatakan tuntas dan ditutup secara resmi (CLOSED). Tindakan ini juga akan menandai Action Plan terkait sebagai COMPLETED. Lanjutkan penutupan?',
+        confirmText: 'Ya, Tutup Temuan (CLOSED)',
+        type: 'success',
+        action: () => router.patch(route('coordinator.findings.close', props.finding.id)),
+    });
+};
 </script>
 
 <template>
     <AppLayout :title="`Review Finding #${finding.id}`">
         <Head :title="`Review Finding #${finding.id} — Koordinator`" />
 
-        <!-- Breadcrumbs -->
+        <!-- Breadcrumbs & Actions -->
         <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
                 <div class="flex items-center gap-2 text-xs text-gray-500 mb-1">
@@ -119,6 +129,18 @@ const submitSeverityReview = () => {
                     <SeverityBadge :severity="finding.severity" :show-timeline="true" />
                     <StatusBadge :status="finding.status" />
                 </h1>
+            </div>
+
+            <div v-if="finding.can_close" class="flex items-center gap-2">
+                <button
+                    @click="closeFinding"
+                    class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-md bg-emerald-600 text-white hover:bg-emerald-700 transition-colors shadow-2xs cursor-pointer"
+                >
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span>Tutup Temuan (Close Finding)</span>
+                </button>
             </div>
         </div>
 

@@ -70,11 +70,14 @@ class FindingPolicy
 
     public function close(User $user, Finding $finding): bool
     {
+        if ($user->isAuditor()) {
+            return false;
+        }
+
         if (! $user->hasPermissionTo('finding.close')) {
             return false;
         }
 
-        $isAssigned = $finding->audit->auditor_id === $user->id || $finding->audit->auditors()->where('users.id', $user->id)->exists();
-        return $isAssigned && $finding->isCloseable();
+        return $finding->isCloseable();
     }
 }

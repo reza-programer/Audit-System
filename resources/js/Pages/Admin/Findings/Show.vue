@@ -107,6 +107,16 @@ const submitSeverityReview = () => {
         preserveScroll: true,
     });
 };
+
+const closeFinding = () => {
+    openConfirm({
+        title: 'Tutup Temuan Audit (Close Finding)',
+        message: 'Temuan ini akan dinyatakan tuntas dan ditutup secara resmi (CLOSED). Tindakan ini juga akan menandai Action Plan terkait sebagai COMPLETED. Lanjutkan penutupan?',
+        confirmText: 'Ya, Tutup Temuan (CLOSED)',
+        type: 'success',
+        action: () => router.patch(route('admin.findings.close', props.finding.id)),
+    });
+};
 </script>
 
 <template>
@@ -130,12 +140,25 @@ const submitSeverityReview = () => {
                 </h1>
             </div>
 
-            <button
-                @click="deleteFinding"
-                class="px-3.5 py-1.5 rounded border border-red-200 text-red-600 hover:bg-red-50 text-xs font-medium transition-colors shadow-2xs"
-            >
-                Hapus Finding
-            </button>
+            <div class="flex items-center gap-2">
+                <button
+                    v-if="finding.can_close"
+                    @click="closeFinding"
+                    class="inline-flex items-center gap-1.5 px-4 py-1.5 text-xs font-semibold rounded-md bg-emerald-600 text-white hover:bg-emerald-700 transition-colors shadow-2xs cursor-pointer"
+                >
+                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span>Tutup Finding (Close)</span>
+                </button>
+
+                <button
+                    @click="deleteFinding"
+                    class="px-3.5 py-1.5 rounded border border-red-200 text-red-600 hover:bg-red-50 text-xs font-medium transition-colors shadow-2xs cursor-pointer"
+                >
+                    Hapus Finding
+                </button>
+            </div>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 text-xs">
