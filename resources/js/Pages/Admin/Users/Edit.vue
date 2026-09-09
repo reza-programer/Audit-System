@@ -96,7 +96,7 @@ const submit = () => {
                             required
                             class="w-full text-xs rounded border-gray-300 focus:border-blue-500 focus:ring-blue-500 font-medium"
                         >
-                            <option value="admin">Administrator (Full Access)</option>
+                            <option value="admin">Admin (Administrator - Full Access)</option>
                             <option value="chief">Chief Auditor (Head of Audit)</option>
                             <option value="asmen">Asisten Manager (Asmen)</option>
                             <option value="coordinator">Koordinator Audit</option>

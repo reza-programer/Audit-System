@@ -34,7 +34,7 @@ const roleFilter = ref('');
 const currentPage = ref(1);
 
 const roleLabels = {
-    admin: 'Administrator',
+    admin: 'Admin',
     chief: 'Chief Auditor',
     asmen: 'Asisten Manager',
     coordinator: 'Koordinator',
@@ -272,7 +272,7 @@ const deleteUser = (user) => {
                         class="w-full py-2 px-3 text-xs rounded border-gray-300 focus:border-slate-500 focus:ring-slate-500 bg-white font-medium"
                     >
                         <option value="">Semua Jabatan</option>
-                        <option value="admin">Administrator</option>
+                        <option value="admin">Admin</option>
                         <option value="chief">Chief Auditor</option>
                         <option value="asmen">Asisten Manager</option>
                         <option value="coordinator">Koordinator</option>
@@ -533,7 +533,7 @@ const deleteUser = (user) => {
                         <option value="auditee">Auditee Toko</option>
                         <option value="asmen">Asisten Manager</option>
                         <option value="chief">Chief Auditor</option>
-                        <option value="admin">Administrator</option>
+                        <option value="admin">Admin (Administrator)</option>
                     </select>
                     <p class="text-[10px] text-gray-400 mt-1">
                         Notifikasi WhatsApp persetujuan akan otomatis dikirim ke nomor pengguna.
