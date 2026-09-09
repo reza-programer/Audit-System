@@ -229,7 +229,7 @@ class FindingController extends Controller
 
         $validated = $request->validate([
             'description' => 'required|string|max:255',
-            'file'        => 'required|file|mimes:jpg,jpeg,png,webp,pdf|max:10240',
+            'file'        => 'required|file|mimes:jpg,jpeg,png,webp,pdf,doc,docx,xls,xlsx|max:10240',
         ]);
 
         $disk = config('filesystems.default');

@@ -103,19 +103,54 @@ const submit = () => {
                 </div>
 
                 <!-- Severity SLA Info Guide -->
-                <div class="bg-gray-50 border border-gray-200 rounded-md p-3 grid grid-cols-3 gap-3 text-center text-xs">
-                    <div class="p-1.5 rounded bg-white border border-gray-200" :class="form.severity === 'MINOR' ? 'border-blue-500 bg-blue-50/40 text-blue-900 font-semibold' : 'text-gray-700'">
-                        <div class="text-xs">Minor</div>
-                        <div class="text-[11px] text-gray-500 font-mono mt-0.5">3 - 7 hari</div>
-                    </div>
-                    <div class="p-1.5 rounded bg-white border border-gray-200" :class="form.severity === 'MEDIUM' ? 'border-blue-500 bg-blue-50/40 text-blue-900 font-semibold' : 'text-gray-700'">
-                        <div class="text-xs">Medium</div>
-                        <div class="text-[11px] text-gray-500 font-mono mt-0.5">8 - 14 hari</div>
-                    </div>
-                    <div class="p-1.5 rounded bg-white border border-gray-200" :class="form.severity === 'MAJOR' ? 'border-blue-500 bg-blue-50/40 text-blue-900 font-semibold' : 'text-gray-700'">
-                        <div class="text-xs">Major</div>
-                        <div class="text-[11px] text-gray-500 font-mono mt-0.5">15 - 30 hari</div>
-                    </div>
+                <div class="bg-gray-50/80 border border-gray-200 rounded-lg p-3 grid grid-cols-3 gap-3 text-center text-xs">
+                    <!-- Minor Card -->
+                    <button
+                        type="button"
+                        @click="form.severity = 'MINOR'"
+                        class="p-2.5 rounded-lg border text-center transition-all cursor-pointer select-none"
+                        :class="form.severity === 'MINOR'
+                            ? 'bg-emerald-100 border-emerald-500 ring-2 ring-emerald-400 text-emerald-950 font-bold shadow-xs'
+                            : 'bg-emerald-50/70 border-emerald-200 text-emerald-800 hover:bg-emerald-100/60 hover:border-emerald-300'"
+                    >
+                        <div class="text-xs font-semibold flex items-center justify-center gap-1">
+                            <span>Minor</span>
+                            <span v-if="form.severity === 'MINOR'" class="text-emerald-700 text-[11px]">✓</span>
+                        </div>
+                        <div class="text-[11px] text-emerald-700/90 font-mono mt-0.5 font-medium">3 - 7 hari</div>
+                    </button>
+
+                    <!-- Medium Card -->
+                    <button
+                        type="button"
+                        @click="form.severity = 'MEDIUM'"
+                        class="p-2.5 rounded-lg border text-center transition-all cursor-pointer select-none"
+                        :class="form.severity === 'MEDIUM'
+                            ? 'bg-amber-100 border-amber-500 ring-2 ring-amber-400 text-amber-950 font-bold shadow-xs'
+                            : 'bg-amber-50/70 border-amber-200 text-amber-800 hover:bg-amber-100/60 hover:border-amber-300'"
+                    >
+                        <div class="text-xs font-semibold flex items-center justify-center gap-1">
+                            <span>Medium</span>
+                            <span v-if="form.severity === 'MEDIUM'" class="text-amber-700 text-[11px]">✓</span>
+                        </div>
+                        <div class="text-[11px] text-amber-700/90 font-mono mt-0.5 font-medium">8 - 14 hari</div>
+                    </button>
+
+                    <!-- Major Card -->
+                    <button
+                        type="button"
+                        @click="form.severity = 'MAJOR'"
+                        class="p-2.5 rounded-lg border text-center transition-all cursor-pointer select-none"
+                        :class="form.severity === 'MAJOR'
+                            ? 'bg-rose-100 border-rose-500 ring-2 ring-rose-400 text-rose-950 font-bold shadow-xs'
+                            : 'bg-rose-50/70 border-rose-200 text-rose-800 hover:bg-rose-100/60 hover:border-rose-300'"
+                    >
+                        <div class="text-xs font-semibold flex items-center justify-center gap-1">
+                            <span>Major</span>
+                            <span v-if="form.severity === 'MAJOR'" class="text-rose-700 text-[11px]">✓</span>
+                        </div>
+                        <div class="text-[11px] text-rose-700/90 font-mono mt-0.5 font-medium">15 - 30 hari</div>
+                    </button>
                 </div>
 
                 <!-- Row 2: Loss amount -->

@@ -382,7 +382,7 @@ const deleteEvidence = (evidenceId) => {
                                         ref="fileInputRef"
                                         type="file"
                                         required
-                                        accept=".jpg,.jpeg,.png,.pdf,.docx,.xlsx"
+                                        accept=".jpg,.jpeg,.png,.webp,.pdf,.doc,.docx,.xls,.xlsx"
                                         @change="handleFileChange"
                                         class="block w-full text-xs text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded file:border file:border-gray-300 file:text-xs file:font-medium file:bg-white file:text-gray-700 hover:file:bg-gray-50 cursor-pointer"
                                     />

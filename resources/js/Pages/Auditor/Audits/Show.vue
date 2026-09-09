@@ -483,15 +483,15 @@ const deleteDoc = (docId) => {
                     </div>
 
                     <div>
-                        <label class="block font-medium text-gray-700 mb-1">File Dokumen (PDF / Scan Gambar) <span class="text-red-500">*</span></label>
+                        <label class="block font-medium text-gray-700 mb-1">File Dokumen (PDF, Word, Excel, PNG, JPEG) <span class="text-red-500">*</span></label>
                         <input
                             type="file"
                             required
-                            accept=".pdf,.jpg,.jpeg,.png,.webp"
+                            accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png,.webp"
                             @change="e => docForm.file = e.target.files[0]"
                             class="w-full text-xs text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded file:border-0 file:text-xs file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
                         />
-                        <p class="text-[10px] text-gray-400 mt-1">Format: PDF, JPG, PNG. Maksimal 10 MB.</p>
+                        <p class="text-[10px] text-gray-400 mt-1">Format: PDF, Word (.doc, .docx), Excel (.xls, .xlsx), PNG, JPG/JPEG. Maksimal 10 MB.</p>
                         <div v-if="docForm.errors.file" class="text-red-600 text-[11px] mt-1">{{ docForm.errors.file }}</div>
                     </div>
 

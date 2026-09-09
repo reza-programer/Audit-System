@@ -108,6 +108,7 @@ Route::middleware(['auth', 'role:admin|chief'])->prefix('admin')->name('admin.')
     Route::get('/findings', [AdminFindingController::class, 'index'])->name('findings.index');
     Route::get('/findings/{finding}', [AdminFindingController::class, 'show'])->name('findings.show');
     Route::patch('/findings/{finding}/review-severity', [AdminFindingController::class, 'reviewSeverity'])->name('findings.review-severity');
+    Route::patch('/findings/{finding}/recommendation', [AdminFindingController::class, 'updateRecommendation'])->name('findings.recommendation.update');
     Route::delete('/findings/{finding}', [AdminFindingController::class, 'destroy'])->name('findings.destroy');
 
     // Action Plans
@@ -152,6 +153,7 @@ Route::middleware(['auth', 'role:coordinator|asmen|chief|admin'])->prefix('coord
     Route::get('/findings', [CoordinatorFindingController::class, 'index'])->name('findings.index');
     Route::get('/findings/{finding}', [CoordinatorFindingController::class, 'show'])->name('findings.show');
     Route::patch('/findings/{finding}/review-severity', [CoordinatorFindingController::class, 'reviewSeverity'])->name('findings.review-severity');
+    Route::patch('/findings/{finding}/recommendation', [CoordinatorFindingController::class, 'updateRecommendation'])->name('findings.recommendation.update');
 
     // Finding Quality Monitoring
     Route::get('/finding-qualities', [AuditorQualityFindingController::class, 'index'])->name('finding-qualities.index');

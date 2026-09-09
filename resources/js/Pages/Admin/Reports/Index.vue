@@ -228,23 +228,23 @@ const topLossStores = computed(() => {
             </div>
         </div>
 
-        <!-- 4 Key Metrics Overview Cards (Matching Screenshot Exactly) -->
+        <!-- 4 Key Metrics Overview Cards (Berwarna Berbeda & Elegan) -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            <div class="bg-white p-5 rounded-xl border border-gray-200/80 shadow-xs">
-                <div class="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">TOTAL KERUGIAN</div>
-                <div class="text-2xl font-bold text-gray-900 font-mono mt-1.5">{{ formatRupiah(total_loss) }}</div>
-                <div class="text-xs text-gray-400 mt-1">Akumulasi cabang CSA</div>
+            <div class="bg-gradient-to-br from-rose-50/80 via-white to-white p-5 rounded-xl border border-rose-200/90 border-t-4 border-t-rose-500 shadow-xs">
+                <div class="text-[11px] font-bold text-rose-700 uppercase tracking-wider">TOTAL KERUGIAN</div>
+                <div class="text-2xl font-bold text-rose-950 font-mono mt-1.5">{{ formatRupiah(total_loss) }}</div>
+                <div class="text-xs text-rose-600/80 mt-1">Akumulasi cabang CSA</div>
             </div>
 
-            <div class="bg-white p-5 rounded-xl border border-gray-200/80 shadow-xs">
-                <div class="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">TOTAL TEMUAN</div>
-                <div class="text-2xl font-bold text-gray-900 mt-1.5">{{ totalFindingsCount }} Temuan</div>
-                <div class="text-xs text-gray-400 mt-1">Dari hasil pemeriksaan</div>
+            <div class="bg-gradient-to-br from-sky-50/80 via-white to-white p-5 rounded-xl border border-sky-200/90 border-t-4 border-t-sky-500 shadow-xs">
+                <div class="text-[11px] font-bold text-sky-700 uppercase tracking-wider">TOTAL TEMUAN</div>
+                <div class="text-2xl font-bold text-sky-950 mt-1.5">{{ totalFindingsCount }} Temuan</div>
+                <div class="text-xs text-sky-600/80 mt-1">Dari hasil pemeriksaan</div>
             </div>
 
-            <div class="bg-white p-5 rounded-xl border border-gray-200/80 shadow-xs">
-                <div class="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">TINGKAT CLOSED</div>
-                <div class="text-2xl font-bold text-emerald-600 mt-1.5">{{ calculatedCompletionRate }}%</div>
+            <div class="bg-gradient-to-br from-emerald-50/80 via-white to-white p-5 rounded-xl border border-emerald-200/90 border-t-4 border-t-emerald-500 shadow-xs">
+                <div class="text-[11px] font-bold text-emerald-700 uppercase tracking-wider">TINGKAT CLOSED</div>
+                <div class="text-2xl font-bold text-emerald-700 mt-1.5">{{ calculatedCompletionRate }}%</div>
                 <div class="text-xs text-gray-400 mt-1 flex flex-wrap items-center gap-1.5">
                     <span><b class="text-gray-700">{{ by_status.CLOSED || 0 }}</b> All</span>
                     <span class="text-gray-300">•</span>
@@ -254,10 +254,10 @@ const topLossStores = computed(() => {
                 </div>
             </div>
 
-            <div class="bg-white p-5 rounded-xl border border-gray-200/80 shadow-xs">
-                <div class="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">RISIKO TINGGI</div>
-                <div class="text-2xl font-bold text-rose-600 mt-1.5">{{ highRiskCount }} Temuan</div>
-                <div class="text-xs text-rose-500 font-medium mt-1">Major & Critical</div>
+            <div class="bg-gradient-to-br from-amber-50/80 via-white to-white p-5 rounded-xl border border-amber-200/90 border-t-4 border-t-amber-500 shadow-xs">
+                <div class="text-[11px] font-bold text-amber-700 uppercase tracking-wider">RISIKO TINGGI</div>
+                <div class="text-2xl font-bold text-amber-700 mt-1.5">{{ highRiskCount }} Temuan</div>
+                <div class="text-xs text-amber-600 font-medium mt-1">Major & Critical</div>
             </div>
         </div>
 

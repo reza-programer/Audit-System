@@ -21,14 +21,82 @@ const formatRupiah = (number) => {
     }).format(number);
 };
 
+import { ref } from 'vue';
+import ConfirmModal from '@/Components/ConfirmModal.vue';
+
+const confirmModal = ref({
+    show: false,
+    title: '',
+    message: '',
+    confirmText: '',
+    type: 'primary',
+    action: null,
+});
+
+const openConfirm = (config) => {
+    confirmModal.value = {
+        show: true,
+        title: config.title || 'Konfirmasi Tindakan',
+        message: config.message || 'Apakah Anda yakin ingin melanjutkan?',
+        confirmText: config.confirmText || 'Ya, Lanjutkan',
+        type: config.type || 'primary',
+        action: config.action,
+    };
+};
+
+const handleConfirm = () => {
+    if (confirmModal.value.action) {
+        confirmModal.value.action();
+    }
+    confirmModal.value.show = false;
+};
+
+const isEditingRecommendation = ref(false);
+const recommendationForm = useForm({
+    recommendation: props.finding.recommendation || '',
+});
+
+const promptEditRecommendation = () => {
+    openConfirm({
+        title: 'Konfirmasi Edit Rekomendasi',
+        message: 'Apakah Anda yakin ingin mengedit rekomendasi perbaikan untuk temuan audit ini?',
+        confirmText: 'Ya, Edit Rekomendasi',
+        type: 'primary',
+        action: () => {
+            isEditingRecommendation.value = true;
+            recommendationForm.recommendation = props.finding.recommendation;
+        },
+    });
+};
+
+const promptSaveRecommendation = () => {
+    openConfirm({
+        title: 'Konfirmasi Simpan Rekomendasi',
+        message: 'Apakah Anda yakin ingin menyimpan perubahan pada rekomendasi perbaikan ini?',
+        confirmText: 'Ya, Simpan Perubahan',
+        type: 'primary',
+        action: () => {
+            recommendationForm.patch(route('coordinator.findings.recommendation.update', props.finding.id), {
+                preserveScroll: true,
+                onSuccess: () => {
+                    isEditingRecommendation.value = false;
+                },
+            });
+        },
+    });
+};
+
 // Form Review Severity (Koordinator)
 const severityForm = useForm({
     severity: props.finding.severity || 'MINOR',
     severity_notes: props.finding.severity_notes || '',
+    recommendation: props.finding.recommendation || '',
 });
 
 const submitSeverityReview = () => {
-    severityForm.patch(route('coordinator.findings.review-severity', props.finding.id));
+    severityForm.patch(route('coordinator.findings.review-severity', props.finding.id), {
+        preserveScroll: true,
+    });
 };
 </script>
 
@@ -87,8 +155,49 @@ const submitSeverityReview = () => {
                         </div>
 
                         <div>
-                            <div class="text-gray-500 font-medium mb-1">Rekomendasi Perbaikan:</div>
-                            <p class="text-gray-800 leading-relaxed bg-gray-50 p-2.5 rounded border border-gray-200">{{ finding.recommendation }}</p>
+                            <div class="flex items-center justify-between mb-1">
+                                <div class="text-gray-500 font-medium">Rekomendasi Perbaikan:</div>
+                                <button
+                                    v-if="!isEditingRecommendation"
+                                    type="button"
+                                    @click="promptEditRecommendation"
+                                    class="text-[11px] text-blue-600 hover:text-blue-800 font-medium flex items-center gap-1 cursor-pointer"
+                                >
+                                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                    </svg>
+                                    Edit Rekomendasi
+                                </button>
+                            </div>
+
+                            <form v-if="isEditingRecommendation" @submit.prevent="promptSaveRecommendation" class="space-y-2">
+                                <textarea
+                                    v-model="recommendationForm.recommendation"
+                                    rows="3"
+                                    required
+                                    placeholder="Tuliskan rekomendasi perbaikan..."
+                                    class="w-full text-xs rounded border-blue-400 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 bg-white"
+                                ></textarea>
+                                <div class="flex items-center justify-end gap-2">
+                                    <button
+                                        type="button"
+                                        @click="isEditingRecommendation = false"
+                                        class="px-2.5 py-1 text-xs rounded border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 cursor-pointer"
+                                    >
+                                        Batal
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        :disabled="recommendationForm.processing"
+                                        class="px-3 py-1 text-xs rounded bg-blue-600 text-white hover:bg-blue-700 font-medium disabled:opacity-50 cursor-pointer"
+                                    >
+                                        {{ recommendationForm.processing ? 'Menyimpan...' : 'Simpan Rekomendasi' }}
+                                    </button>
+                                </div>
+                            </form>
+                            <p v-else class="text-gray-800 leading-relaxed bg-gray-50 p-2.5 rounded border border-gray-200">
+                                {{ finding.recommendation || '—' }}
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -171,12 +280,49 @@ const submitSeverityReview = () => {
                             <select
                                 v-model="severityForm.severity"
                                 required
-                                class="w-full text-xs rounded border-gray-300 focus:border-blue-500 focus:ring-blue-500 font-medium"
+                                class="w-full text-xs rounded border-gray-300 focus:border-blue-500 focus:ring-blue-500 font-medium mb-2"
                             >
                                 <option value="MINOR">Minor (Timeline SLA: 3 - 7 hari)</option>
                                 <option value="MEDIUM">Medium (Timeline SLA: 8 - 14 hari)</option>
                                 <option value="MAJOR">Major (Timeline SLA: 15 - 30 hari)</option>
                             </select>
+
+                            <!-- Severity SLA Quick Select Cards -->
+                            <div class="grid grid-cols-3 gap-1.5 text-center text-xs">
+                                <button
+                                    type="button"
+                                    @click="severityForm.severity = 'MINOR'"
+                                    class="p-1.5 rounded border text-center transition-all cursor-pointer select-none"
+                                    :class="severityForm.severity === 'MINOR'
+                                        ? 'bg-emerald-100 border-emerald-500 ring-1 ring-emerald-400 text-emerald-950 font-bold shadow-xs'
+                                        : 'bg-emerald-50/70 border-emerald-200 text-emerald-800 hover:bg-emerald-100/60'"
+                                >
+                                    <div class="text-[11px] font-semibold">Minor</div>
+                                    <div class="text-[10px] text-emerald-700/80 font-mono">3 - 7 hr</div>
+                                </button>
+                                <button
+                                    type="button"
+                                    @click="severityForm.severity = 'MEDIUM'"
+                                    class="p-1.5 rounded border text-center transition-all cursor-pointer select-none"
+                                    :class="severityForm.severity === 'MEDIUM'
+                                        ? 'bg-amber-100 border-amber-500 ring-1 ring-amber-400 text-amber-950 font-bold shadow-xs'
+                                        : 'bg-amber-50/70 border-amber-200 text-amber-800 hover:bg-amber-100/60'"
+                                >
+                                    <div class="text-[11px] font-semibold">Medium</div>
+                                    <div class="text-[10px] text-amber-700/80 font-mono">8 - 14 hr</div>
+                                </button>
+                                <button
+                                    type="button"
+                                    @click="severityForm.severity = 'MAJOR'"
+                                    class="p-1.5 rounded border text-center transition-all cursor-pointer select-none"
+                                    :class="severityForm.severity === 'MAJOR'
+                                        ? 'bg-rose-100 border-rose-500 ring-1 ring-rose-400 text-rose-950 font-bold shadow-xs'
+                                        : 'bg-rose-50/70 border-rose-200 text-rose-800 hover:bg-rose-100/60'"
+                                >
+                                    <div class="text-[11px] font-semibold">Major</div>
+                                    <div class="text-[10px] text-rose-700/80 font-mono">15 - 30 hr</div>
+                                </button>
+                            </div>
                         </div>
 
                         <div>
@@ -241,5 +387,16 @@ const submitSeverityReview = () => {
                 />
             </div>
         </div>
+
+        <!-- Confirmation Modal -->
+        <ConfirmModal
+            :show="confirmModal.show"
+            :title="confirmModal.title"
+            :message="confirmModal.message"
+            :confirm-text="confirmModal.confirmText"
+            :type="confirmModal.type"
+            @confirm="handleConfirm"
+            @close="confirmModal.show = false"
+        />
     </AppLayout>
 </template>

@@ -24,7 +24,7 @@ const props = defineProps({
 
 const form = useForm({
     finding_id: props.preselectedFinding || '',
-    quality_category: 'impact_50m',
+    quality_categories: ['impact_50m'],
     title: '',
     impact_amount: '',
     root_cause: '',
@@ -32,6 +32,24 @@ const form = useForm({
     recommendation: '',
     auditor_notes: '',
 });
+
+const toggleCategory = (key) => {
+    const index = form.quality_categories.indexOf(key);
+    if (index > -1) {
+        form.quality_categories.splice(index, 1);
+    } else {
+        form.quality_categories.push(key);
+    }
+};
+
+const selectAllCategories = () => {
+    const allKeys = Object.keys(props.categories);
+    if (form.quality_categories.length === allKeys.length) {
+        form.quality_categories = [];
+    } else {
+        form.quality_categories = [...allKeys];
+    }
+};
 
 // Auto fill loss amount when finding is selected
 watch(
@@ -48,6 +66,55 @@ watch(
         }
     }
 );
+
+const getCardTheme = (key, isChecked) => {
+    const themes = {
+        impact_50m: {
+            container: isChecked
+                ? 'border-emerald-600 bg-emerald-50/80 ring-2 ring-emerald-500 shadow-xs border-t-4 border-t-emerald-600'
+                : 'border-emerald-200/90 bg-emerald-50/30 hover:border-emerald-400 hover:bg-emerald-50/60 border-t-4 border-t-emerald-500/70',
+            checkbox: 'text-emerald-600 focus:ring-emerald-500',
+            badge: isChecked ? 'bg-emerald-700 text-white' : 'bg-emerald-100 text-emerald-800 border border-emerald-300',
+            title: 'text-emerald-950',
+            desc: 'text-emerald-800/90',
+        },
+        fraud_risk: {
+            container: isChecked
+                ? 'border-rose-600 bg-rose-50/80 ring-2 ring-rose-500 shadow-xs border-t-4 border-t-rose-600'
+                : 'border-rose-200/90 bg-rose-50/30 hover:border-rose-400 hover:bg-rose-50/60 border-t-4 border-t-rose-500/70',
+            checkbox: 'text-rose-600 focus:ring-rose-500',
+            badge: isChecked ? 'bg-rose-700 text-white' : 'bg-rose-100 text-rose-800 border border-rose-300',
+            title: 'text-rose-950',
+            desc: 'text-rose-800/90',
+        },
+        system_control: {
+            container: isChecked
+                ? 'border-indigo-600 bg-indigo-50/80 ring-2 ring-indigo-500 shadow-xs border-t-4 border-t-indigo-600'
+                : 'border-indigo-200/90 bg-indigo-50/30 hover:border-indigo-400 hover:bg-indigo-50/60 border-t-4 border-t-indigo-500/70',
+            checkbox: 'text-indigo-600 focus:ring-indigo-500',
+            badge: isChecked ? 'bg-indigo-700 text-white' : 'bg-indigo-100 text-indigo-800 border border-indigo-300',
+            title: 'text-indigo-950',
+            desc: 'text-indigo-800/90',
+        },
+        org_structure: {
+            container: isChecked
+                ? 'border-amber-600 bg-amber-50/80 ring-2 ring-amber-500 shadow-xs border-t-4 border-t-amber-600'
+                : 'border-amber-200/90 bg-amber-50/30 hover:border-amber-400 hover:bg-amber-50/60 border-t-4 border-t-amber-500/70',
+            checkbox: 'text-amber-600 focus:ring-amber-500',
+            badge: isChecked ? 'bg-amber-700 text-white' : 'bg-amber-100 text-amber-800 border border-amber-300',
+            title: 'text-amber-950',
+            desc: 'text-amber-800/90',
+        },
+    };
+
+    return themes[key] || {
+        container: isChecked ? 'border-blue-600 bg-blue-50/40 ring-1 ring-blue-600' : 'border-gray-200 hover:border-gray-300 bg-white',
+        checkbox: 'text-blue-600 focus:ring-blue-500',
+        badge: 'bg-slate-100 text-slate-800',
+        title: 'text-gray-900',
+        desc: 'text-gray-500',
+    };
+};
 
 const selectedFindingObj = computed(() => {
     return props.findings.find(f => f.id === Number(form.finding_id));
@@ -70,7 +137,7 @@ const submit = () => {
             </div>
             <h1 class="text-xl font-semibold text-gray-900 tracking-tight">Formulir Laporan Finding Quality</h1>
             <p class="text-xs text-gray-500 mt-1">
-                Pilih salah satu dari 4 pilar kriteria temuan berkualitas tinggi untuk dilaporkan ke manajemen
+                Pilih kriteria temuan berkualitas tinggi untuk dilaporkan ke manajemen (dapat memilih 1 hingga 4 kategori sekaligus)
             </p>
         </div>
 
@@ -104,35 +171,55 @@ const submit = () => {
                     </div>
                 </div>
 
-                <!-- STEP 2: Pilih 1 dari 4 Kategori Target Temuan High Quality -->
+                <!-- STEP 2: Pilih Kategori Target Temuan High Quality (Bisa multi-pilih hingga 4 kategori) -->
                 <div>
-                    <label class="block font-semibold text-gray-800 text-xs mb-2">
-                        2. Kategori Target Finding Quality <span class="text-red-500">*</span>
-                    </label>
+                    <div class="flex items-center justify-between mb-2">
+                        <label class="block font-semibold text-gray-800 text-xs">
+                            2. Kategori Target Finding Quality <span class="text-red-500">*</span>
+                            <span class="font-normal text-gray-500 ml-1">(Dapat dipilih lebih dari satu atau sekaligus ke-4 nya)</span>
+                        </label>
+                        <button
+                            type="button"
+                            @click="selectAllCategories"
+                            class="text-[11px] text-blue-600 hover:text-blue-800 font-semibold cursor-pointer underline"
+                        >
+                            {{ form.quality_categories.length === Object.keys(categories).length ? 'Batal Pilih Semua' : 'Pilih Semua (4 Kategori)' }}
+                        </button>
+                    </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div
                             v-for="(cat, key) in categories"
                             :key="key"
-                            @click="form.quality_category = key"
-                            class="p-3.5 rounded-lg border cursor-pointer transition-colors flex items-start gap-3"
-                            :class="form.quality_category === key ? 'border-blue-600 bg-blue-50/40 ring-1 ring-blue-600' : 'border-gray-200 hover:border-gray-300 bg-white'"
+                            @click="toggleCategory(key)"
+                            class="p-4 rounded-xl border cursor-pointer transition-all flex items-start gap-3.5 select-none"
+                            :class="getCardTheme(key, form.quality_categories.includes(key)).container"
                         >
+                            <div class="flex items-center h-5 mt-0.5">
+                                <input
+                                    type="checkbox"
+                                    :value="key"
+                                    :checked="form.quality_categories.includes(key)"
+                                    @click.stop="toggleCategory(key)"
+                                    class="h-4 w-4 rounded border-gray-300 cursor-pointer"
+                                    :class="getCardTheme(key, form.quality_categories.includes(key)).checkbox"
+                                />
+                            </div>
                             <div class="flex-1">
-                                <div class="flex items-center justify-between">
-                                    <div class="font-semibold text-gray-900 text-xs">{{ cat.label }}</div>
-                                    <input
-                                        type="radio"
-                                        name="quality_category"
-                                        :value="key"
-                                        v-model="form.quality_category"
-                                        class="text-blue-600 focus:ring-blue-500"
-                                    />
+                                <div class="flex items-center justify-between mb-1">
+                                    <div class="font-bold text-xs" :class="getCardTheme(key, form.quality_categories.includes(key)).title">
+                                        {{ cat.label }}
+                                    </div>
+                                    <span class="font-mono text-[10px] font-bold px-1.5 py-0.5 rounded shadow-2xs" :class="getCardTheme(key, form.quality_categories.includes(key)).badge">
+                                        {{ cat.code }}
+                                    </span>
                                 </div>
-                                <p class="text-[11px] text-gray-500 mt-1 leading-relaxed">{{ cat.description }}</p>
+                                <p class="text-[11px] leading-relaxed" :class="getCardTheme(key, form.quality_categories.includes(key)).desc">
+                                    {{ cat.description }}
+                                </p>
                             </div>
                         </div>
                     </div>
-                    <div v-if="form.errors.quality_category" class="text-red-600 text-[11px] mt-1">{{ form.errors.quality_category }}</div>
+                    <div v-if="form.errors.quality_categories" class="text-red-600 text-[11px] mt-1">{{ form.errors.quality_categories }}</div>
                 </div>
 
                 <!-- STEP 3: Judul & Dampak Finansial -->

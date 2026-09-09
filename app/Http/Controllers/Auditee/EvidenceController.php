@@ -16,7 +16,7 @@ class EvidenceController extends Controller
         $this->authorize('view', $finding);
 
         $request->validate([
-            'file'        => 'required|file|mimes:jpg,jpeg,png,pdf,xlsx,docx|max:10240',
+            'file'        => 'required|file|mimes:jpg,jpeg,png,webp,pdf,doc,docx,xls,xlsx|max:10240',
             'description' => 'nullable|string|max:500',
         ]);
 

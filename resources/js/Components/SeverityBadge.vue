@@ -32,7 +32,7 @@ const config = computed(() => {
             return {
                 label: 'Minor',
                 timeline: '3 - 7 hari',
-                style: 'bg-slate-100 text-slate-700 border-slate-200 font-medium',
+                style: 'bg-emerald-50 text-emerald-800 border-emerald-200 font-medium',
             };
         default:
             return {

@@ -78,9 +78,18 @@ const deleteQualityFinding = () => {
             <div class="p-6 border-b border-gray-200 bg-slate-50/70">
                 <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                     <div>
-                        <div class="flex items-center gap-2 mb-1.5">
-                            <span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-slate-200 text-slate-800 border border-slate-300">
-                                {{ qualityFinding.categories_info.label }}
+                        <div class="flex items-center gap-2 mb-1.5 flex-wrap">
+                            <template v-if="qualityFinding.quality_categories_info && qualityFinding.quality_categories_info.length">
+                                <span
+                                    v-for="cat in qualityFinding.quality_categories_info"
+                                    :key="cat.id"
+                                    class="px-2 py-0.5 rounded text-[11px] font-semibold bg-slate-200 text-slate-800 border border-slate-300"
+                                >
+                                    {{ cat.label }}
+                                </span>
+                            </template>
+                            <span v-else class="px-2 py-0.5 rounded text-[11px] font-semibold bg-slate-200 text-slate-800 border border-slate-300">
+                                {{ qualityFinding.categories_info?.label || qualityFinding.quality_category }}
                             </span>
                             <span class="font-mono text-gray-500">#FQ-{{ String(qualityFinding.id).padStart(4, '0') }}</span>
                         </div>

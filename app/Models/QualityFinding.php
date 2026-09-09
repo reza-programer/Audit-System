@@ -30,6 +30,46 @@ class QualityFinding extends Model
         'impact_amount' => 'decimal:2',
     ];
 
+    protected $appends = [
+        'quality_categories',
+    ];
+
+    public function getQualityCategoriesAttribute(): array
+    {
+        $val = $this->attributes['quality_category'] ?? null;
+        if (empty($val)) {
+            return [];
+        }
+        if (is_array($val)) {
+            return $val;
+        }
+        $decoded = json_decode($val, true);
+        if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+            return array_values($decoded);
+        }
+        return array_values(array_filter(array_map('trim', explode(',', $val))));
+    }
+
+    public function setQualityCategoryAttribute($value): void
+    {
+        if (is_array($value)) {
+            $this->attributes['quality_category'] = json_encode(array_values($value));
+        } else {
+            $this->attributes['quality_category'] = $value;
+        }
+    }
+
+    public function getQualityCategoriesInfoAttribute(): array
+    {
+        $all = self::categories();
+        return array_map(fn ($k) => $all[$k] ?? [
+            'id'          => $k,
+            'code'        => '-',
+            'label'       => $k,
+            'description' => '',
+        ], $this->quality_categories);
+    }
+
     const CATEGORY_IMPACT_50M    = 'impact_50m';
     const CATEGORY_FRAUD_RISK    = 'fraud_risk';
     const CATEGORY_SYSTEM_CONTROL = 'system_control';
@@ -41,8 +81,8 @@ class QualityFinding extends Model
             self::CATEGORY_IMPACT_50M => [
                 'id'          => self::CATEGORY_IMPACT_50M,
                 'code'        => '01',
-                'label'       => 'Impact > Rp 50 Juta',
-                'description' => 'Temuan yang berdampak finansial atau potensi kerugian melebihi Rp 50.000.000,-',
+                'label'       => 'Impact ≥ Rp 50 Juta',
+                'description' => 'Temuan yang berdampak pada finansial ataupun potensi kerugian yang mencapai Rp.50.000.000 atau lebih',
             ],
             self::CATEGORY_FRAUD_RISK => [
                 'id'          => self::CATEGORY_FRAUD_RISK,

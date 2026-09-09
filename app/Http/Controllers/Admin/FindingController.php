@@ -100,28 +100,48 @@ class FindingController extends Controller
         ]);
     }
 
+    public function updateRecommendation(Request $request, Finding $finding): RedirectResponse
+    {
+        $validated = $request->validate([
+            'recommendation' => 'required|string|max:2000',
+        ]);
+
+        $finding->update([
+            'recommendation' => $validated['recommendation'],
+        ]);
+
+        return back()->with('success', 'Rekomendasi perbaikan temuan audit berhasil diperbarui.');
+    }
+
     public function reviewSeverity(Request $request, Finding $finding): RedirectResponse
     {
         $validated = $request->validate([
             'severity'       => 'required|in:MINOR,MEDIUM,MAJOR,CRITICAL,OBSERVATION',
             'severity_notes' => 'nullable|string|max:500',
+            'recommendation' => 'nullable|string|max:2000',
         ]);
 
         $oldSeverity = $finding->severity;
         $isAdjusted  = $oldSeverity !== $validated['severity'];
 
-        $finding->update([
+        $updateData = [
             'severity'             => $validated['severity'],
             'severity_status'      => $isAdjusted ? 'ADJUSTED' : 'APPROVED',
             'severity_reviewed_by' => $request->user()->id,
             'severity_reviewed_at' => now(),
             'severity_notes'       => $validated['severity_notes'] ?? null,
             'is_severity_locked'   => true,
-        ]);
+        ];
+
+        if (array_key_exists('recommendation', $validated) && $validated['recommendation'] !== null) {
+            $updateData['recommendation'] = $validated['recommendation'];
+        }
+
+        $finding->update($updateData);
 
         \App\Services\WhatsAppService::notifySeverityReviewed($finding, $oldSeverity);
 
-        return back()->with('success', 'Severity berhasil direview & dikunci. Notifikasi WhatsApp telah dikirim ke Auditor.');
+        return back()->with('success', 'Severity & Rekomendasi berhasil disimpan. Notifikasi WhatsApp telah dikirim ke Auditor.');
     }
 
     public function destroy(Finding $finding): RedirectResponse
